@@ -1,82 +1,80 @@
 # Student Finance Tracker
 
-A responsive, accessible finance tracking app built for the Responsive UI summative assignment. The goal was to build something that would actually be useful for tracking student spending — not just a generic CRUD demo.
+Finance tracker built for the Responsive UI summative. Tracks income, expenses and savings, with a budget cap, 7-day chart, and regex-powered search.
 
-**Live demo:** [https://Runweztt.github.io/student-finance-tracker](https://Runweztt.github.io/student-finance-tracker)
+**Live:** [https://Runweztt.github.io/student-finance-tracker](https://Runweztt.github.io/student-finance-tracker)
 
----
-
-## Overview
-
-Built with plain HTML, CSS, and vanilla JavaScript (ES Modules). No frameworks, no libraries, no build step — just files you can open in a browser.
-
-The app lets you:
-- Log and manage transactions across categories
-- Search using text or regex patterns
-- See a 7-day spending chart and category breakdown
-- Set a budget cap that alerts you when you go over
-- Switch between USD, EUR, and RWF with manual exchange rates in Settings
-- Export your data as JSON and import it back
+Built with plain HTML, CSS and vanilla JavaScript (ES Modules). No frameworks, no build step.
 
 ---
 
-## Features
+## What it does
 
-- **Regex validation** on all four required fields, plus duplicate-word detection
-- **Live search** with regex support, case-sensitive toggle, and `<mark>` highlighting
-- **Sortable table** — click date, description, or amount column headers
-- **Accessible modals** with focus trapping, ESC to close, and focus restoration
-- **ARIA live regions** — polite for status, assertive for budget alerts
-- **Keyboard navigation** throughout — full tab order, arrow keys on nav tabs
-- **LocalStorage** persistence with corruption handling
-- **JSON import/export** with per-record validation and error messages
-- **Mobile-first layout** at 360px, 768px, and 1024px breakpoints
-- **Dark mode** support via `prefers-color-scheme`
+- Log income, expenses and savings across categories
+- Set a budget cap — alerts you when you go over
+- Search by plain text or regex, with `<mark>` highlighting
+- 7-day spending chart and category breakdown on the dashboard
+- Switch between USD, EUR and RWF with manual exchange rates
+- Export data as JSON and import it back on another device
+- Works offline after the first load — everything stays in the browser
 
 ---
 
-## Pages
+## Running it locally
 
-| File | Description |
-|------|-------------|
-| `index.html` | Landing / home page — hero, features, CTAs |
-| `login.html` | Sign-in form |
-| `register.html` | Account creation form |
-| `app.html` | The protected finance tracker (dashboard, transactions, settings, about) |
+Needs to be served (not `file://`) because of ES module imports.
 
-Auth is localStorage-based. Passwords are hashed with SHA-256 + random salt via the Web Crypto API (`scripts/auth.js`). No data leaves the browser.
+```bash
+git clone https://github.com/Runweztt/student-finance-tracker
+cd student-finance-tracker
+npx serve .
+```
 
-## Folder Structure
+Open `http://localhost:3000`, create an account, then you're in.
+
+To load sample data: go to Transactions → Import JSON → pick `seed.json`.
+
+---
+
+## Running tests
+
+```bash
+npx serve .
+```
+
+Then open `http://localhost:3000/tests.html`. It runs automatically and shows pass/fail for every validator. No setup needed.
+
+---
+
+## File structure
 
 ```
-student-finance-tracker/
-├── index.html          ← Home / landing page
-├── login.html          ← Sign-in page
-├── register.html       ← Account creation page
-├── app.html            ← Protected finance tracker
-├── tests.html          ← Validation unit tests
-├── seed.json           ← 12 sample transactions
-├── README.md
+├── index.html          landing page
+├── login.html
+├── register.html
+├── app.html            the actual tracker
+├── tests.html          validator unit tests
+├── seed.json           13 sample transactions
 │
 ├── styles/
-│   ├── variables.css   ← design tokens
-│   ├── reset.css       ← CSS reset + a11y utilities
-│   ├── layout.css      ← structural layout
-│   ├── components.css  ← buttons, inputs, table, chart, modals, toasts
-│   ├── home.css        ← home page + auth page styles
-│   └── responsive.css  ← media queries (360/768/1024px)
+│   ├── variables.css   design tokens
+│   ├── reset.css
+│   ├── layout.css
+│   ├── components.css
+│   ├── home.css        home + auth pages
+│   └── responsive.css
 │
 ├── scripts/
-│   ├── app.js          ← entry point, event wiring
-│   ├── auth.js         ← registration, login, logout (Web Crypto SHA-256)
-│   ├── state.js        ← reactive store (getState/setState/subscribe)
-│   ├── storage.js      ← localStorage with try/catch
-│   ├── validators.js   ← all regex patterns + validation functions
-│   ├── search.js       ← safe regex compiler, highlight, sort/filter
-│   ├── stats.js        ← pure computation (totals, trend, breakdown)
-│   ├── settings.js     ← settings form, currency formatting
-│   ├── ui.js           ← all DOM rendering
-│   └── importExport.js ← JSON round-trip
+│   ├── app.js          entry point, event wiring
+│   ├── auth.js         register / login / logout
+│   ├── state.js        getState / setState / subscribe
+│   ├── storage.js      localStorage wrapper
+│   ├── validators.js   all regex patterns + validators
+│   ├── search.js       regex compiler, highlight, sort
+│   ├── stats.js        totals, trend, breakdown
+│   ├── settings.js     settings form, currency formatting
+│   ├── ui.js           all DOM rendering
+│   └── importExport.js JSON import and export
 │
 └── docs/
     ├── wireframes.md
@@ -85,153 +83,73 @@ student-finance-tracker/
 
 ---
 
-## Regex Catalog
+## Regex catalog
 
-All patterns live in `scripts/validators.js`.
+All patterns are in `scripts/validators.js` and imported directly by `tests.html`.
 
-| Field | Pattern | Notes |
-|-------|---------|-------|
-| Description | `/^\S(?:.*\S)?$\|^\S$/` | No leading/trailing whitespace |
-| Amount | `/^(0\|[1-9]\d*)(\.\d{1,2})?$/` | Non-negative, max 2 decimals |
-| Date | `/^\d{4}-(0[1-9]\|1[0-2])-(0[1-9]\|[12]\d\|3[01])$/` | YYYY-MM-DD |
-| Category | `/^[A-Za-z]+(?:[ -][A-Za-z]+)*$/` | Letters, spaces, hyphens |
-| **Duplicate word** | `/\b(\w+)\s+\1\b/i` | Back-reference — catches "the the" |
-| **Cents** | `/\b\d+\.\d{2}\b/` | Used as a demo search pattern |
-| Beverage | `/(coffee\|tea\|juice\|drink)/i` | Demo search pattern |
+| Field | Pattern | What it catches |
+|-------|---------|-----------------|
+| Description | `/^\S(?:.*\S)?$\|^\S$/` | leading or trailing spaces |
+| Amount | `/^(0\|[1-9]\d*)(\.\d{1,2})?$/` | negative numbers, leading zeros, more than 2 decimal places |
+| Date | `/^\d{4}-(0[1-9]\|1[0-2])-(0[1-9]\|[12]\d\|3[01])$/` | wrong format, month 13, day 0 |
+| Category | `/^[A-Za-z]+(?:[ -][A-Za-z]+)*$/` | numbers, symbols, double spaces |
+| **Duplicate word** | `/\b(\w+)\s+\1\b/i` | "the the", "at at" etc. — back-reference |
+| Cents search | `/\b\d+\.\d{2}\b/` | demo search pattern |
+| Beverage search | `/(coffee\|tea\|juice\|drink)/i` | demo search pattern |
 
-The duplicate-word pattern is the advanced regex (back-reference). It runs on the description field in real time and shows a warning if you accidentally type a word twice.
-
----
-
-## Accessibility Notes
-
-- Skip-to-content link appears on first Tab keypress
-- Navigation uses ARIA `role="tablist"` with arrow key support
-- All dialogs have `role="dialog" aria-modal="true"` with focus trapping
-- Form fields use `aria-describedby` linking to hints and error messages
-- Errors announced via `aria-live="assertive"` regions
-- Budget cap status uses two separate live regions — polite (under budget) and assertive (over budget)
-- Chart has a visually hidden accessible table as a screen reader alternative
-- Color contrast meets WCAG 2.1 AA minimum
-- All interactive elements reachable by keyboard
+The duplicate-word one is the advanced pattern. It uses a back-reference (`\1`) to check if the same word appears twice in a row. It runs live on the description field and shows a warning if it matches.
 
 ---
 
-## Keyboard Navigation Map
+## Keyboard shortcuts
 
-| Key | Action |
-|-----|--------|
-| `Tab` | Move between interactive elements |
-| `Shift+Tab` | Move backwards |
-| `Enter` / `Space` | Activate button or link |
-| `←` `→` | Move between navigation tabs (when focused) |
-| `Home` / `End` | First / last navigation tab |
-| `Esc` | Close any open modal |
-| `Alt+N` | Open "Add Transaction" from anywhere |
-| `Alt+1` | Go to Dashboard |
-| `Alt+2` | Go to Finances |
-| `Alt+3` | Go to Transactions |
-| `Alt+4` | Go to Settings |
-| `Alt+5` | Go to About |
+| Key | What it does |
+|-----|-------------|
+| `Tab` / `Shift+Tab` | move forward / backward |
+| `←` `→` | switch between nav tabs |
+| `Home` / `End` | first / last tab |
+| `Esc` | close any open modal |
+| `Alt+N` | open Add Transaction from anywhere |
+| `Alt+1` | Dashboard |
+| `Alt+2` | Finances |
+| `Alt+3` | Transactions |
+| `Alt+4` | Settings |
+| `Alt+5` | About |
 
 ---
 
-## Running Tests
+## Accessibility
 
-Open `tests.html` in a browser. It runs automatically and shows pass/fail for all validators. The page needs to be served (not `file://`) because it uses ES module imports.
-
-Quick way to serve locally:
-
-```bash
-npx serve .
-# or
-python3 -m http.server 8080
-```
-
-Then visit `http://localhost:8080/tests.html`.
+- Skip-to-content link at the top of every page
+- Nav uses `role="tablist"` with arrow key support
+- Modals have `role="dialog" aria-modal="true"` with focus trapping
+- Errors announced via `aria-live="assertive"`
+- Budget alerts use two live regions — polite when under, assertive when over (you can't change `aria-live` dynamically so I used two separate elements)
+- The bar chart has a visually hidden `<table>` as a screen reader alternative
+- Color contrast meets WCAG 2.1 AA
 
 ---
 
-## Installation / Running Locally
+## Auth note
 
-No build step needed. Needs to be served (not `file://`) because of ES module imports.
-
-```bash
-git clone https://github.com/Runweztt/student-finance-tracker
-cd student-finance-tracker
-npx serve .
-```
-
-Open `http://localhost:3000`. You'll land on the home page — create an account or sign in, then you're taken to the tracker.
-
-To load the seed data: Transactions → Import JSON → select `seed.json`.
+Accounts are stored in localStorage. Passwords are hashed with SHA-256 and a random salt using `crypto.subtle` (the browser's built-in Web Crypto API). This is not a third-party API — it makes no network requests and works fully offline. It's the same category as `localStorage` or `Date`. The "no API" constraint in the brief refers to external services like live currency rate feeds, not browser built-ins.
 
 ---
 
-## GitHub Pages Deployment
+## Design decisions
 
-```bash
-git checkout -b gh-pages
-git push origin gh-pages
-```
+**Two ARIA live regions for the budget cap** — `aria-live` can't be changed dynamically across browsers reliably, so I have one polite element and one assertive element and write to whichever one is appropriate.
 
-Then enable GitHub Pages in repo settings → Pages → Source: `gh-pages` branch, `/ (root)`.
+**Amounts stored in USD** — conversion is only for display. If I converted at save time, switching currencies would break all the old numbers.
 
-The app uses only relative paths and no server-side dependencies so it works on GitHub Pages without any configuration.
+**Savings have no delete button** — intentional. The brief asked for a permanent savings type that never gets deleted. The only way to remove savings is the "Clear all transactions" button in Settings, which wipes everything.
 
----
-
-## Screenshots
-
-_Add screenshots here after deployment._
-
-| Dashboard | Transactions | Mobile |
-|-----------|-------------|--------|
-| _(screenshot)_ | _(screenshot)_ | _(screenshot)_ |
+**Passwords hashed client-side** — using `crypto.subtle` (see Auth note above). Not a framework or external API.
 
 ---
 
-## Design Decisions
+## Known issues
 
-**CSS custom properties instead of a utility class library** — makes theming and dark mode much easier to maintain, and keeps the CSS readable without digging through 30 class names on each element.
-
-**Two separate ARIA live regions for budget alerts** — you can't change `aria-live` dynamically in a reliable way across browsers, so I use a polite region for "under budget" messages and an assertive region for "over budget" alerts.
-
-**ES modules without a bundler** — the module graph is simple enough that bundling isn't needed for a project this size. GitHub Pages serves `type="module"` scripts correctly.
-
-**Storing amounts in USD** — currency conversion is a display concern only. EUR and RWF are derived from the stored USD value using the user-set exchange rate. Switching currencies does not change stored data.
-
-**Savings have no delete button** — this is intentional. The assignment brief asked for a "permanent savings" type that never leaves regardless. Savings rows are locked; only the "Clear all transactions" button in Settings can remove them. Income and expense transactions can be deleted normally.
-
-**Mobile card layout vs. table** — the responsive table uses `display: block` with `data-label` pseudo-elements on mobile instead of forcing horizontal scroll. Easier to read on small screens.
-
----
-
-## Known Limitations
-
-- Date validation uses regex only — it accepts structurally valid but calendar-invalid dates like `2025-02-31`. A full calendar validation would complicate the regex significantly and the date input type already prevents most of these.
-- Exchange rates are manual — there's no API integration, so rates go stale. This was a deliberate assignment constraint.
-- The 7-day chart only shows spending, not income (the assignment only covers expense tracking).
-- No pagination — all transactions render at once. Fine for student-scale data but would need pagination at hundreds of records.
-
----
-
-## Commit History (Milestone Map)
-
-For reference, the development followed these milestones:
-
-```
-M1: docs: add wireframes and data model sketch
-M2: feat: semantic HTML layout and base CSS
-M3: feat: form validation with four regex rules
-M3: feat: tests.html with validator assertions
-M4: feat: transaction table with sort and search
-M4: fix: safe regex compiler handles invalid patterns
-M5: feat: dashboard stats and 7-day chart
-M5: feat: category breakdown with proportional bars
-M6: feat: localStorage persistence and import/export
-M6: feat: currency settings and budget cap
-M7: fix: keyboard focus trap in modals
-M7: style: improve focus visibility and animations
-M7: docs: complete README with regex catalog
-```
+- Date regex accepts structurally valid but impossible dates like `2025-02-31`. The browser's date input prevents most of these anyway so I left it.
+- Exchange rates go stale since there's no live feed — that's what the assignment asked for.
+- No pagination, all transactions render at once. Fine for this scale.
