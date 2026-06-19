@@ -65,7 +65,7 @@ With the server running open `http://localhost:3000/tests.html`. The page runs a
 │   └── importExport.js JSON import and export
 │
 └── docs/
-    ├── wireframes.md
+    ├── wireframes
     
 ```
 
