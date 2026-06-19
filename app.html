@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Student Finance Tracker - personal money tracker for students.">
+  <title>Student Finance Tracker</title>
+  <link rel="stylesheet" href="styles/variables.css">
+  <link rel="stylesheet" href="styles/reset.css">
+  <link rel="stylesheet" href="styles/layout.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/responsive.css">
+</head>
+<body>
+
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <div id="status-region"    role="status" aria-live="polite"    aria-atomic="true" class="sr-only"></div>
+  <div id="alert-region"     role="alert"  aria-live="assertive" aria-atomic="true" class="sr-only"></div>
+  <div id="budget-polite"    role="status" aria-live="polite"    aria-atomic="true" class="sr-only"></div>
+  <div id="budget-assertive" role="alert"  aria-live="assertive" aria-atomic="true" class="sr-only"></div>
+
+  <header class="app-header" role="banner">
+    <div class="header-inner">
+      <a class="header-brand" href="index.html" aria-label="Student Finance Tracker home">
+        
+        <span class="brand-name">Student Finance Tracker</span>
+      </a>
+      <nav class="app-nav" aria-label="Main navigation">
+        <ul class="nav-list" id="main-nav-list" role="tablist" aria-label="Application sections">
+          <li role="presentation">
+            <button class="nav-btn active" role="tab" id="tab-dashboard"
+              aria-selected="true" aria-controls="section-dashboard" data-section="dashboard">
+              Dashboard
+            </button>
+          </li>
+          <li role="presentation">
+            <button class="nav-btn" role="tab" id="tab-expenses"
+              aria-selected="false" aria-controls="section-expenses" data-section="expenses">
+              Finances
+            </button>
+          </li>
+          <li role="presentation">
+            <button class="nav-btn" role="tab" id="tab-transactions"
+              aria-selected="false" aria-controls="section-transactions" data-section="transactions">
+              Transactions
+            </button>
+          </li>
+          <li role="presentation">
+            <button class="nav-btn" role="tab" id="tab-settings"
+              aria-selected="false" aria-controls="section-settings" data-section="settings">
+              Settings
+            </button>
+          </li>
+          <li role="presentation">
+            <button class="nav-btn" role="tab" id="tab-about"
+              aria-selected="false" aria-controls="section-about" data-section="about">
+              About
+            </button>
+          </li>
+          <li role="presentation">
+            <button class="nav-btn nav-btn--logout" id="btn-logout" type="button" aria-label="Sign out">
+              Logout
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content" class="app-main" role="main">
+
+    <!-- dashboard -->
+    <section id="section-dashboard" class="app-section active"
+      role="tabpanel" aria-labelledby="tab-dashboard" aria-hidden="false">
+
+      <div class="section-header">
+        <div class="section-header-left">
+          <h1>Dashboard</h1>
+          <p class="section-subtitle">Overview</p>
+        </div>
+      </div>
+
+      <div class="stats-grid" role="list" aria-label="Financial summary">
+        <div class="stat-card stat-card--balance" id="stat-balance-card" role="listitem">
+          <div class="stat-label">Balance</div>
+          <div class="stat-value" id="stat-balance" aria-live="polite">$0.00</div>
+          <div class="stat-sub" id="stat-balance-sub">Current balance</div>
+        </div>
+        <div class="stat-card stat-card--income" role="listitem">
+          <div class="stat-label">Money In</div>
+          <div class="stat-value stat-value--income" id="stat-income" aria-live="polite">$0.00</div>
+          <div class="stat-sub">Income total</div>
+        </div>
+        <div class="stat-card stat-card--expense" role="listitem">
+          <div class="stat-label">Money Out</div>
+          <div class="stat-value stat-value--expense" id="stat-expense" aria-live="polite">$0.00</div>
+          <div class="stat-sub">Expenses total</div>
+        </div>
+        <div class="stat-card stat-card--savings" role="listitem">
+          <div class="stat-label">Savings</div>
+          <div class="stat-value stat-value--savings" id="stat-savings" aria-live="polite">$0.00</div>
+          <div class="stat-sub">Locked away</div>
+        </div>
+      </div>
+
+      <div class="chart-section" aria-labelledby="chart-heading">
+        <h2 id="chart-heading">Last 7 Days</h2>
+        <div class="chart-container" aria-hidden="true">
+          <div class="bar-chart" id="bar-chart"></div>
+          <div class="chart-labels" id="chart-labels"></div>
+        </div>
+        <table class="sr-only" id="chart-data-table" aria-label="Spending for the last 7 days">
+          <caption>Daily spending totals for the past 7 days</caption>
+          <thead><tr><th scope="col">Date</th><th scope="col">Amount Spent</th></tr></thead>
+          <tbody id="chart-data-body"></tbody>
+        </table>
+      </div>
+
+      <div class="breakdown-section" aria-labelledby="breakdown-heading">
+        <h2 id="breakdown-heading">Category Breakdown</h2>
+        <div id="breakdown-list" role="list" aria-label="Spending by category" aria-live="polite">
+          <p class="breakdown-empty">No data yet.</p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- finances -->
+    <section id="section-expenses" class="app-section"
+      role="tabpanel" aria-labelledby="tab-expenses" aria-hidden="true">
+
+      <div class="section-header">
+        <div class="section-header-left">
+          <h1>Finances</h1>
+          <p class="section-subtitle">Money in, out and savings</p>
+        </div>
+        <div class="section-header-actions fin-actions">
+          <button class="btn btn--income" id="btn-add-income" type="button">+ In</button>
+          <button class="btn btn--outgo"  id="btn-add-expense" type="button">− Out</button>
+          <button class="btn btn--save"   id="btn-add-savings" type="button">🏦 Save</button>
+        </div>
+      </div>
+
+      <!-- Summary strip -->
+      <div class="fin-summary" role="list" aria-label="Finance summary">
+        <div class="fin-summary-item fin-summary-item--balance" role="listitem">
+          <span class="fin-summary-label">Balance</span>
+          <span class="fin-summary-value" id="fin-balance">—</span>
+        </div>
+        <div class="fin-summary-item fin-summary-item--income" role="listitem">
+          <span class="fin-summary-label">Money In</span>
+          <span class="fin-summary-value" id="fin-income">—</span>
+        </div>
+        <div class="fin-summary-item fin-summary-item--expense" role="listitem">
+          <span class="fin-summary-label">Money Out</span>
+          <span class="fin-summary-value" id="fin-expense">—</span>
+        </div>
+        <div class="fin-summary-item fin-summary-item--savings" role="listitem">
+          <span class="fin-summary-label">Savings</span>
+          <span class="fin-summary-value" id="fin-savings">—</span>
+        </div>
+      </div>
+
+      <!-- Panels rendered by JS -->
+      <div id="fin-panels" aria-live="polite"></div>
+
+    </section>
+
+    <!-- transactions -->
+    <section id="section-transactions" class="app-section"
+      role="tabpanel" aria-labelledby="tab-transactions" aria-hidden="true">
+
+      <div class="section-header">
+        <div class="section-header-left">
+          <h1>Transactions</h1>
+          <p class="section-subtitle" id="transactions-count-label">0 records</p>
+        </div>
+        <div class="section-header-actions">
+          <button class="btn btn--primary" id="btn-add-transaction" aria-haspopup="dialog" title="Add Transaction (Alt+N)">
+            Add Transaction
+          </button>
+        </div>
+      </div>
+
+      <div class="toolbar" role="search" aria-label="Search and filter transactions">
+        <div class="search-field">
+          <label for="search-input" class="search-label">Search</label>
+          <div class="search-input-wrap">
+            <input type="search" id="search-input" class="input"
+              placeholder="Search transactions" autocomplete="off" spellcheck="false"
+              aria-describedby="search-hint search-status">
+            <span class="search-icon" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.5"/>
+                <line x1="10.5" y1="10.5" x2="14" y2="14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </span>
+          </div>
+          <span id="search-hint" class="field-hint">Supports regex, e.g. <code>(coffee|tea)</code></span>
+          <div id="search-status" class="search-status" role="status" aria-live="polite"></div>
+        </div>
+        <div class="search-options">
+          <label class="toggle-label">
+            <input type="checkbox" id="search-case-sensitive" class="toggle-input"
+              role="switch" aria-checked="false" aria-label="Case sensitive search">
+            <span class="toggle-track" aria-hidden="true"></span>
+            <span class="toggle-text">Case sensitive</span>
+          </label>
+          <div>
+            <label for="filter-category" class="visually-hidden">Filter by category</label>
+            <select id="filter-category" class="select" aria-label="Filter by category">
+              <option value="">All categories</option>
+              <option value="Food">Food</option>
+              <option value="Books">Books</option>
+              <option value="Transport">Transport</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="Fees">Fees</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="data-actions">
+        <button class="btn btn--ghost btn--sm" id="btn-import" aria-label="Import transactions from JSON">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M8 2v9M4 8l4 4 4-4M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Import JSON
+        </button>
+        <button class="btn btn--ghost btn--sm" id="btn-export" aria-label="Export transactions as JSON">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M8 11V2M4 5l4-4 4 4M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Export JSON
+        </button>
+        <input type="file" id="import-file-input" accept=".json,application/json"
+          class="sr-only" aria-label="Choose JSON file to import" tabindex="-1">
+      </div>
+
+      <div class="table-wrap" role="region" aria-label="Transactions table" tabindex="0">
+        <table class="data-table" id="transactions-table" aria-label="Financial transactions">
+          <caption class="sr-only">Your financial transactions. Click column headers to sort.</caption>
+          <thead>
+            <tr>
+              <th scope="col">
+                <button class="sort-btn" data-sort="date" aria-label="Sort by date" aria-sort="descending">
+                  Date <span class="sort-icon" aria-hidden="true">↓</span>
+                </button>
+              </th>
+              <th scope="col">
+                <button class="sort-btn" data-sort="description" aria-label="Sort by description" aria-sort="none">
+                  Description <span class="sort-icon" aria-hidden="true">↕</span>
+                </button>
+              </th>
+              <th scope="col">Category</th>
+              <th scope="col">
+                <button class="sort-btn" data-sort="amount" aria-label="Sort by amount" aria-sort="none">
+                  Amount <span class="sort-icon" aria-hidden="true">↕</span>
+                </button>
+              </th>
+              <th scope="col"><span class="sr-only">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody id="transactions-tbody" aria-live="polite" aria-relevant="all"></tbody>
+        </table>
+      </div>
+
+      <div class="empty-state" id="empty-state" hidden>
+        <div class="empty-icon" aria-hidden="true">📊</div>
+        <h3>No transactions yet</h3>
+        <p>Nothing here yet. Add one to get started.</p>
+        <button class="btn btn--primary" id="btn-add-first" aria-haspopup="dialog">
+          Add one
+        </button>
+      </div>
+
+    </section>
+
+    <!-- settings -->
+    <section id="section-settings" class="app-section"
+      role="tabpanel" aria-labelledby="tab-settings" aria-hidden="true">
+
+      <div class="section-header">
+        <div class="section-header-left">
+          <h1>Settings</h1>
+          <p class="section-subtitle">Currency, balance and categories</p>
+        </div>
+      </div>
+
+      <div class="settings-groups">
+
+        <!-- Currency -->
+        <div class="settings-group">
+          <div class="settings-group-header">
+            <h2>Display Currency</h2>
+            <span class="settings-live-badge" aria-label="Changes apply instantly">⚡ Instant</span>
+          </div>
+          <p class="settings-group-desc">Pick your display currency. Set the exchange rate below.</p>
+          <fieldset class="fieldset">
+            <legend class="sr-only">Choose display currency</legend>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="base-currency" value="USD" class="radio-input" checked>
+                <span class="radio-label-content">
+                  <strong>USD</strong>
+                  <span class="radio-label-desc">US Dollar ($)</span>
+                </span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="base-currency" value="EUR" class="radio-input">
+                <span class="radio-label-content">
+                  <strong>EUR</strong>
+                  <span class="radio-label-desc">Euro (€)</span>
+                </span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="base-currency" value="RWF" class="radio-input">
+                <span class="radio-label-content">
+                  <strong>RWF</strong>
+                  <span class="radio-label-desc">Rwanda Franc (FRw)</span>
+                </span>
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="exchange-rates">
+            <h3>Exchange Rates <span class="settings-save-note">(save to apply)</span></h3>
+            <div class="rates-grid">
+              <div class="form-field">
+                <label for="rate-eur" class="form-label">1 USD =</label>
+                <div class="input-with-addon">
+                  <span class="input-addon" aria-hidden="true">EUR</span>
+                  <input type="number" id="rate-eur" class="input input--with-addon" value="0.92" min="0.001" step="0.001">
+                </div>
+              </div>
+              <div class="form-field">
+                <label for="rate-rwf" class="form-label">1 USD =</label>
+                <div class="input-with-addon">
+                  <span class="input-addon" aria-hidden="true">RWF</span>
+                  <input type="number" id="rate-rwf" class="input input--with-addon" value="1450" min="1" step="1">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Initial Balance -->
+        <div class="settings-group">
+          <div class="settings-group-header">
+            <h2>Initial Balance</h2>
+            <span class="settings-save-badge">Requires Save</span>
+          </div>
+          <p class="settings-group-desc">Your starting amount. Balance = this + Money In - Money Out.</p>
+          <div class="form-field" style="max-width:16rem">
+            <label for="initial-balance" class="form-label">Starting amount</label>
+            <div class="input-with-addon">
+              <span class="input-addon currency-symbol" aria-hidden="true">$</span>
+              <input type="number" id="initial-balance" class="input input--with-addon" placeholder="e.g. 10000000" min="0" step="0.01">
+            </div>
+            <span class="field-hint">Numbers only, no commas.</span>
+          </div>
+        </div>
+
+        <!-- Budget Cap -->
+        <div class="settings-group">
+          <div class="settings-group-header">
+            <h2>Spending Cap</h2>
+            <span class="settings-save-badge">Requires Save</span>
+          </div>
+          <p class="settings-group-desc">Shows a warning when spending goes over this. Leave blank to skip.</p>
+          <div class="form-field" style="max-width:16rem">
+            <label for="budget-cap" class="form-label">Cap amount</label>
+            <div class="input-with-addon">
+              <span class="input-addon currency-symbol" aria-hidden="true">$</span>
+              <input type="number" id="budget-cap" class="input input--with-addon" placeholder="e.g. 500" min="0" step="0.01">
+            </div>
+          </div>
+        </div>
+
+        <!-- Categories -->
+        <div class="settings-group">
+          <div class="settings-group-header">
+            <h2>Categories</h2>
+            <span class="settings-live-badge" aria-label="Changes apply instantly">⚡ Instant</span>
+          </div>
+          <p class="settings-group-desc">Built-in categories stay fixed. Add your own below.</p>
+          <div class="categories-list" id="categories-list" role="list" aria-label="Expense categories"></div>
+          <div class="add-category-form">
+            <div class="form-field">
+              <label for="new-category-input" class="form-label">Add new category</label>
+              <div class="input-row">
+                <input type="text" id="new-category-input" class="input" placeholder="e.g. Housing" maxlength="30"
+                  aria-describedby="new-category-hint new-category-error">
+                <button type="button" class="btn btn--secondary" id="btn-add-category">Add</button>
+              </div>
+              <span id="new-category-hint" class="field-hint">Letters and spaces only. Max 30 chars.</span>
+              <span id="new-category-error" class="field-error" role="alert" aria-live="assertive"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-actions">
+          <button class="btn btn--primary" id="btn-save-settings">Save Settings</button>
+          <button class="btn btn--ghost"   id="btn-reset-settings">Reset to Defaults</button>
+        </div>
+        <p class="settings-save-explain">Currency and categories apply straight away. Everything else needs Save.</p>
+
+        <div class="settings-group settings-group--danger">
+          <h2>Clear All Data</h2>
+          <p class="settings-group-desc">Deletes every transaction including savings. Settings are not affected.</p>
+          <button class="btn btn--danger" id="btn-clear-all-data">Clear all transactions</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- about -->
+    <section id="section-about" class="app-section"
+      role="tabpanel" aria-labelledby="tab-about" aria-hidden="true">
+
+      <div class="section-header"><h1>About</h1></div>
+
+      <div class="about-content">
+        <div class="about-hero">
+          <h2>Student Finance Tracker</h2>
+          <p class="about-tagline">A money tracker built for students. No server, no signup, just your data.</p>
+        </div>
+        <div class="about-grid">
+          <div class="about-card">
+            <h3>Purpose</h3>
+            <p>See where your money goes across Food, Books, Transport and more. Check 7-day spending, set a cap and export your data any time.</p>
+          </div>
+          <div class="about-card">
+            <h3>Features</h3>
+            <ul class="feature-list" role="list">
+              <li>Income, expense &amp; savings tracking</li>
+              <li>Set a starting balance, see it update live</li>
+              <li>7-day spending chart</li>
+              <li>3 currencies (USD, EUR, RWF)</li>
+              <li>Fast search across all transactions</li>
+              <li>Spending cap with alerts</li>
+              <li>Import and export as JSON</li>
+              <li>Saves in your browser, no account needed</li>
+            </ul>
+          </div>
+          <div class="about-card">
+            <h3>Keyboard Shortcuts</h3>
+            <ul class="feature-list" role="list">
+              <li><kbd>Alt+N</kbd> - Add transaction</li>
+              <li><kbd>Alt+1-5</kbd> - Jump between sections</li>
+              <li><kbd>← →</kbd> - Move between tabs</li>
+              <li><kbd>Esc</kbd> - Close popup</li>
+            </ul>
+          </div>
+          <div class="about-card">
+            <h3>Contact</h3>
+            <ul class="contact-list" role="list">
+              <li>
+                <span class="contact-label">GitHub</span>
+                <a href="https://github.com/Runweztt" class="link" target="_blank" rel="noopener noreferrer">github.com/Runweztt</a>
+              </li>
+              <li>
+                <span class="contact-label">Email</span>
+                <a href="mailto:amarikwat@gmail.com" class="link">amarikwat@gmail.com</a>
+              </li>
+            </ul>
+            <h3 style="margin-top:var(--space-5)">Tech Stack</h3>
+            <ul class="tech-list" role="list">
+              <li>HTML5</li>
+              <li>CSS3</li>
+              <li>Vanilla JavaScript</li>
+              <li>LocalStorage</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer class="app-footer" role="contentinfo">
+    <div class="footer-inner">
+      <p>Student Finance Tracker &copy; 2025</p>
+    </div>
+  </footer>
+
+  <!-- add / edit transaction dialog -->
+  <div id="transaction-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-heading" hidden>
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modal-heading">Add Transaction</h2>
+        <button class="btn-icon modal-close" id="modal-close" aria-label="Close dialog" type="button">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <line x1="5" y1="5" x2="15" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="15" y1="5" x2="5" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <form id="transaction-form" novalidate>
+        <div class="form-body">
+          <!-- Transaction type toggle -->
+          <div class="form-field">
+            <span class="form-label">Type</span>
+            <div class="txn-type-group" role="group" aria-label="Transaction type">
+              <label class="txn-type-label">
+                <input type="radio" name="txn-type" value="expense" class="sr-only" checked>
+                <span class="txn-type-btn txn-type-btn--expense"> Money Out</span>
+              </label>
+              <label class="txn-type-label">
+                <input type="radio" name="txn-type" value="income" class="sr-only">
+                <span class="txn-type-btn txn-type-btn--income"> Money In</span>
+              </label>
+              <label class="txn-type-label">
+                <input type="radio" name="txn-type" value="savings" class="sr-only">
+                <span class="txn-type-btn txn-type-btn--savings"> Save</span>
+              </label>
+            </div>
+          </div>
+          <div class="form-field">
+            <label for="field-description" id="label-description" class="form-label form-label--required">What was it for?</label>
+            <input type="text" id="field-description" name="description" class="input" required
+              autocomplete="off" maxlength="200" aria-required="true"
+              aria-describedby="description-error">
+            <span id="description-error" class="field-error" role="alert" aria-live="assertive"></span>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="field-amount" class="form-label form-label--required">Amount</label>
+              <div class="input-with-addon input-with-addon--split">
+                <select id="field-currency" class="input input--currency-pick" aria-label="Currency">
+                  <option value="USD">USD</option>
+                  <option value="EUR">EUR</option>
+                  <option value="RWF">RWF</option>
+                </select>
+                <input type="text" id="field-amount" name="amount" class="input input--with-addon"
+                  required inputmode="decimal" placeholder="0.00" aria-required="true"
+                  aria-describedby="amount-hint amount-error">
+              </div>
+              <span id="amount-hint" class="field-hint">Numbers only, no commas.</span>
+              <span id="amount-error" class="field-error" role="alert" aria-live="assertive"></span>
+            </div>
+            <div class="form-field">
+              <label for="field-date" class="form-label form-label--required">Date</label>
+              <input type="date" id="field-date" name="date" class="input" required
+                aria-required="true" aria-describedby="date-hint date-error">
+              <span id="date-hint" class="field-hint">YYYY-MM-DD</span>
+              <span id="date-error" class="field-error" role="alert" aria-live="assertive"></span>
+            </div>
+          </div>
+          <div class="form-field">
+            <label for="field-category" class="form-label form-label--required">Category</label>
+            <select id="field-category" name="category" class="select" required
+              aria-required="true" aria-describedby="category-error">
+              <option value="">Pick a category</option>
+              <option value="Food">Food</option>
+              <option value="Books">Books</option>
+              <option value="Transport">Transport</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="Fees">Fees</option>
+              <option value="Other">Other</option>
+            </select>
+            <span id="category-error" class="field-error" role="alert" aria-live="assertive"></span>
+          </div>
+          <div id="duplicate-word-warning" class="field-warning" role="alert" aria-live="polite" hidden>
+            <span aria-hidden="true">⚠</span>
+            <span>Looks like a duplicate word in there.</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn--ghost" id="modal-cancel">Cancel</button>
+          <button type="submit" class="btn btn--primary" id="modal-submit">Add Transaction</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- delete confirmation dialog -->
+  <div id="delete-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="delete-modal-heading" hidden>
+    <div class="modal modal--sm">
+      <div class="modal-header">
+        <h2 id="delete-modal-heading">Delete Transaction</h2>
+      </div>
+      <div class="modal-body">
+        <p>Delete "<strong id="delete-item-name"></strong>"? This cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn--ghost"  id="delete-cancel">Cancel</button>
+        <button type="button" class="btn btn--danger" id="delete-confirm">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="clear-data-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="clear-data-heading" hidden>
+    <div class="modal modal--sm">
+      <div class="modal-header">
+        <h2 id="clear-data-heading">Clear all transactions</h2>
+      </div>
+      <div class="modal-body">
+        <p>This will delete every transaction including savings. You cannot undo this.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn--ghost"  id="clear-data-cancel">Cancel</button>
+        <button type="button" class="btn btn--danger" id="clear-data-confirm">Clear all</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile bottom nav (hidden on desktop via CSS) -->
+  <nav class="bottom-nav" aria-label="Mobile navigation">
+    <button class="nav-btn bottom-nav-btn active" data-section="dashboard" aria-selected="true" role="tab">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M3 20h18M8 20V10m4 10V4m4 16v-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <span>Dashboard</span>
+    </button>
+    <button class="nav-btn bottom-nav-btn" data-section="expenses" aria-selected="false" role="tab">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 2v20M17 7H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <span>Finances</span>
+    </button>
+    <button class="nav-btn bottom-nav-btn" data-section="transactions" aria-selected="false" role="tab">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <span>Transactions</span>
+    </button>
+    <button class="nav-btn bottom-nav-btn" data-section="settings" aria-selected="false" role="tab">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+      <span>Settings</span>
+    </button>
+    <button class="nav-btn bottom-nav-btn" data-section="about" aria-selected="false" role="tab">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M12 8h.01M12 12v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <span>About</span>
+    </button>
+  </nav>
+
+  <div id="reset-settings-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="reset-settings-heading" hidden>
+    <div class="modal modal--sm">
+      <div class="modal-header">
+        <h2 id="reset-settings-heading">Reset to Defaults</h2>
+      </div>
+      <div class="modal-body">
+        <p>This resets currency, exchange rate, budget cap and categories back to defaults. Your transactions are not affected.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn--ghost"   id="reset-settings-cancel">Cancel</button>
+        <button type="button" class="btn btn--primary" id="reset-settings-confirm">Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container" role="log" aria-live="polite" aria-atomic="false" aria-label="Notifications"></div>
+
+  <script type="module">
+    import { isLoggedIn, logout } from './scripts/auth.js';
+
+    // Guard — redirect to login if not authenticated
+    if (!isLoggedIn()) window.location.replace('login.html');
+
+    document.getElementById('btn-logout')?.addEventListener('click', () => {
+      logout();
+      window.location.replace('index.html');
+    });
+  </script>
+  <script type="module" src="scripts/app.js"></script>
+
+</body>
+</html>

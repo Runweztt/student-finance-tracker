@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account · Student Finance Tracker</title>
+  <link rel="stylesheet" href="styles/variables.css">
+  <link rel="stylesheet" href="styles/reset.css">
+  <link rel="stylesheet" href="styles/layout.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/responsive.css">
+  <link rel="stylesheet" href="styles/home.css">
+</head>
+<body class="auth-page">
+
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="app-header" role="banner">
+    <div class="header-inner">
+      <a class="header-brand" href="index.html" aria-label="Student Finance Tracker home">
+        
+        <span class="brand-name">Student Finance Tracker</span>
+      </a>
+      <nav class="app-nav" aria-label="Main navigation">
+        <ul class="nav-list" role="list">
+          <li><a class="nav-link" href="index.html">Home</a></li>
+          <li><a class="nav-link" href="login.html">Login</a></li>
+          <li><a class="nav-link nav-link--cta active" href="register.html" aria-current="page">Get Started</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content" class="auth-main" role="main">
+    <div class="auth-card">
+
+      <div class="auth-header">
+        <h1>Create account</h1>
+        <p>Free forever. Your data stays on this device.</p>
+      </div>
+
+      <div id="register-error" class="auth-error" role="alert" aria-live="assertive" hidden></div>
+
+      <form id="register-form" class="auth-form" novalidate>
+
+        <div class="form-field">
+          <label for="reg-name" class="form-label form-label--required">Full name</label>
+          <input
+            type="text"
+            id="reg-name"
+            class="input"
+            required
+            autocomplete="name"
+            aria-required="true"
+            aria-describedby="reg-name-error"
+            placeholder="Your name"
+          >
+          <span id="reg-name-error" class="field-error" role="alert" aria-live="assertive"></span>
+        </div>
+
+        <div class="form-field">
+          <label for="reg-email" class="form-label form-label--required">Email address</label>
+          <input
+            type="email"
+            id="reg-email"
+            class="input"
+            required
+            autocomplete="email"
+            aria-required="true"
+            aria-describedby="reg-email-error"
+            placeholder="you@example.com"
+          >
+          <span id="reg-email-error" class="field-error" role="alert" aria-live="assertive"></span>
+        </div>
+
+        <div class="form-field">
+          <label for="reg-password" class="form-label form-label--required">Password</label>
+          <div class="input-with-reveal">
+            <input
+              type="password"
+              id="reg-password"
+              class="input"
+              required
+              autocomplete="new-password"
+              aria-required="true"
+              aria-describedby="reg-password-hint reg-password-error"
+            >
+            <button
+              type="button"
+              class="reveal-btn"
+              id="toggle-reg-password"
+              aria-label="Show password"
+              aria-pressed="false"
+            >
+              <svg class="eye-open" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z" stroke="currentColor" stroke-width="1.5"/>
+                <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+              <svg class="eye-closed" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" hidden>
+                <path d="M1 1l14 14M6.5 6.6A2 2 0 0010 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M3.5 3.7C2.1 4.8 1 6.5 1 8s2.5 5 7 5a8.2 8.2 0 003.5-.8M6 2.3A7.3 7.3 0 0115 8c-.3.8-.8 1.7-1.5 2.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+          <span id="reg-password-hint" class="field-hint">At least 8 characters.</span>
+          <span id="reg-password-error" class="field-error" role="alert" aria-live="assertive"></span>
+        </div>
+
+        <div class="form-field">
+          <label for="reg-confirm" class="form-label form-label--required">Confirm password</label>
+          <input
+            type="password"
+            id="reg-confirm"
+            class="input"
+            required
+            autocomplete="new-password"
+            aria-required="true"
+            aria-describedby="reg-confirm-error"
+          >
+          <span id="reg-confirm-error" class="field-error" role="alert" aria-live="assertive"></span>
+        </div>
+
+        <button type="submit" class="btn btn--primary btn--full" id="register-submit">
+          Create account
+        </button>
+
+      </form>
+
+      <p class="auth-switch">
+        Already have an account? <a href="login.html" class="link">Sign in</a>
+      </p>
+
+    </div>
+  </main>
+
+  <script type="module">
+    import { register, isLoggedIn } from './scripts/auth.js';
+
+    if (isLoggedIn()) window.location.replace('app.html');
+
+    if (!window.crypto?.subtle) {
+      document.getElementById('register-error').textContent =
+        'This app must be opened from a web server, not a file. Run: npx serve . — then open http://localhost:3000';
+      document.getElementById('register-error').hidden = false;
+      document.getElementById('register-submit').disabled = true;
+    }
+
+    const form        = document.getElementById('register-form');
+    const errorBanner = document.getElementById('register-error');
+    const submitBtn   = document.getElementById('register-submit');
+
+    // Password reveal toggles
+    setupReveal('reg-password', 'toggle-reg-password');
+
+    function setupReveal(inputId, btnId) {
+      const input = document.getElementById(inputId);
+      const btn   = document.getElementById(btnId);
+      if (!btn) return;
+      btn.addEventListener('click', () => {
+        const showing = input.type === 'text';
+        input.type = showing ? 'password' : 'text';
+        btn.setAttribute('aria-pressed', String(!showing));
+        btn.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
+        btn.querySelector('.eye-open').hidden  = !showing;
+        btn.querySelector('.eye-closed').hidden =  showing;
+      });
+    }
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      errorBanner.hidden = true;
+
+      const name     = document.getElementById('reg-name').value.trim();
+      const email    = document.getElementById('reg-email').value.trim();
+      const password = document.getElementById('reg-password').value;
+      const confirm  = document.getElementById('reg-confirm').value;
+
+      const errors = {
+        name:     '',
+        email:    '',
+        password: '',
+        confirm:  '',
+      };
+
+      if (!name)                              errors.name     = 'Name is required.';
+      if (!email)                             errors.email    = 'Email is required.';
+      if (!password)                          errors.password = 'Password is required.';
+      else if (password.length < 8)           errors.password = 'Password must be at least 8 characters.';
+      if (password && confirm !== password)   errors.confirm  = 'Passwords do not match.';
+
+      document.getElementById('reg-name-error').textContent     = errors.name;
+      document.getElementById('reg-email-error').textContent    = errors.email;
+      document.getElementById('reg-password-error').textContent = errors.password;
+      document.getElementById('reg-confirm-error').textContent  = errors.confirm;
+
+      if (Object.values(errors).some(Boolean)) return;
+
+      submitBtn.disabled     = true;
+      submitBtn.textContent  = 'Creating account…';
+
+      let result;
+      try {
+        result = await register({ name, email, password });
+      } catch (err) {
+        errorBanner.textContent = 'Something went wrong. Make sure you are opening this app from a web server (npx serve .), not directly from a file.';
+        errorBanner.hidden      = false;
+        submitBtn.disabled      = false;
+        submitBtn.textContent   = 'Create account';
+        return;
+      }
+
+      if (result.success) {
+        window.location.replace('app.html');
+      } else {
+        errorBanner.textContent = result.message;
+        errorBanner.hidden      = false;
+        submitBtn.disabled      = false;
+        submitBtn.textContent   = 'Create account';
+      }
+    });
+  </script>
+
+</body>
+</html>

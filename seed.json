@@ -1,0 +1,132 @@
+[
+  {
+    "id": "txn_seed_001",
+    "type": "expense",
+    "description": "Cafeteria pasta lunch",
+    "amount": 6.50,
+    "category": "Food",
+    "date": "2025-09-25",
+    "createdAt": "2025-09-25T12:30:00.000Z",
+    "updatedAt": "2025-09-25T12:30:00.000Z"
+  },
+  {
+    "id": "txn_seed_002",
+    "type": "expense",
+    "description": "Organic Chemistry textbook",
+    "amount": 89.99,
+    "category": "Books",
+    "date": "2025-09-23",
+    "createdAt": "2025-09-23T09:15:00.000Z",
+    "updatedAt": "2025-09-23T09:15:00.000Z"
+  },
+  {
+    "id": "txn_seed_003",
+    "type": "expense",
+    "description": "Monthly bus pass",
+    "amount": 45.00,
+    "category": "Transport",
+    "date": "2025-09-01",
+    "createdAt": "2025-09-01T08:00:00.000Z",
+    "updatedAt": "2025-09-01T08:00:00.000Z"
+  },
+  {
+    "id": "txn_seed_004",
+    "type": "expense",
+    "description": "Coffee with friends after lecture",
+    "amount": 8.75,
+    "category": "Entertainment",
+    "date": "2025-09-28",
+    "createdAt": "2025-09-28T15:45:00.000Z",
+    "updatedAt": "2025-09-28T15:45:00.000Z"
+  },
+  {
+    "id": "txn_seed_005",
+    "type": "expense",
+    "description": "Autumn term tuition fee installment",
+    "amount": 1250.00,
+    "category": "Fees",
+    "date": "2025-09-05",
+    "createdAt": "2025-09-05T10:00:00.000Z",
+    "updatedAt": "2025-09-05T10:00:00.000Z"
+  },
+  {
+    "id": "txn_seed_006",
+    "type": "expense",
+    "description": "Supermarket weekly shop",
+    "amount": 34.12,
+    "category": "Food",
+    "date": "2025-09-20",
+    "createdAt": "2025-09-20T17:30:00.000Z",
+    "updatedAt": "2025-09-20T17:30:00.000Z"
+  },
+  {
+    "id": "txn_seed_007",
+    "type": "expense",
+    "description": "Train ticket home for reading week",
+    "amount": 52.40,
+    "category": "Transport",
+    "date": "2025-10-04",
+    "createdAt": "2025-10-04T07:20:00.000Z",
+    "updatedAt": "2025-10-04T07:20:00.000Z"
+  },
+  {
+    "id": "txn_seed_008",
+    "type": "expense",
+    "description": "Cinema ticket student discount",
+    "amount": 7.99,
+    "category": "Entertainment",
+    "date": "2025-09-27",
+    "createdAt": "2025-09-27T19:00:00.000Z",
+    "updatedAt": "2025-09-27T19:00:00.000Z"
+  },
+  {
+    "id": "txn_seed_009",
+    "type": "expense",
+    "description": "Linear Algebra used copy",
+    "amount": 12.50,
+    "category": "Books",
+    "date": "2025-09-10",
+    "createdAt": "2025-09-10T14:00:00.000Z",
+    "updatedAt": "2025-09-10T14:00:00.000Z"
+  },
+  {
+    "id": "txn_seed_010",
+    "type": "expense",
+    "description": "Stationery and highlighters",
+    "amount": 3.49,
+    "category": "Other",
+    "date": "2025-09-08",
+    "createdAt": "2025-09-08T11:00:00.000Z",
+    "updatedAt": "2025-09-08T11:00:00.000Z"
+  },
+  {
+    "id": "txn_seed_011",
+    "type": "income",
+    "description": "September student loan payment",
+    "amount": 2500.00,
+    "category": "Fees",
+    "date": "2025-09-02",
+    "createdAt": "2025-09-02T09:00:00.000Z",
+    "updatedAt": "2025-09-02T09:00:00.000Z"
+  },
+  {
+    "id": "txn_seed_012",
+    "type": "income",
+    "description": "Part-time bar work Saturday",
+    "amount": 85.00,
+    "category": "Other",
+    "date": "2025-09-22",
+    "createdAt": "2025-09-22T23:00:00.000Z",
+    "updatedAt": "2025-09-22T23:00:00.000Z"
+  },
+  {
+    "id": "txn_seed_013",
+    "type": "savings",
+    "description": "Emergency fund deposit",
+    "amount": 200.00,
+    "category": "Other",
+    "date": "2025-09-03",
+    "createdAt": "2025-09-03T10:00:00.000Z",
+    "updatedAt": "2025-09-03T10:00:00.000Z"
+  }
+]

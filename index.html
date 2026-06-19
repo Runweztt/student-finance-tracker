@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Student Finance Tracker. Log what you spend, see where it goes. Free, private, works in your browser.">
+  <title>Student Finance Tracker</title>
+  <link rel="stylesheet" href="styles/variables.css">
+  <link rel="stylesheet" href="styles/reset.css">
+  <link rel="stylesheet" href="styles/layout.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/responsive.css">
+  <link rel="stylesheet" href="styles/home.css">
+</head>
+<body>
+
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="app-header" role="banner">
+    <div class="header-inner">
+      <a class="header-brand" href="index.html" aria-label="Student Finance Tracker home">
+        
+        <span class="brand-name">Student Finance Tracker</span>
+      </a>
+      <nav class="app-nav" aria-label="Main navigation">
+        <ul class="nav-list" role="list">
+          <li><a class="nav-link active" href="index.html" aria-current="page">Home</a></li>
+          <li><a class="nav-link" href="login.html">Login</a></li>
+          <li><a class="nav-link nav-link--cta" href="register.html">Get Started</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content" role="main">
+
+    <!-- hero -->
+    <section class="hero" aria-labelledby="hero-heading">
+      <div class="hero-inner">
+        <h1 id="hero-heading">Your student budget, sorted.</h1>
+        <p class="hero-sub">
+          Log what you spend. See where it goes.<br>
+           No signup fee. Runs in your browser.
+        </p>
+        <div class="hero-actions">
+          <a href="register.html" class="btn btn--hero-primary btn--lg">Get started free</a>
+          <a href="login.html"    class="btn btn--hero-ghost btn--lg">Sign in</a>
+        </div>
+        <div class="hero-chips">
+          <span>Free forever</span>
+          <span>Works offline</span>
+          <span>Data stays on your device</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- trust strip -->
+    <div class="trust-strip" role="list" aria-label="Key facts">
+      <div class="trust-item" role="listitem">
+        <span class="trust-icon" aria-hidden="true">🔒</span>
+        <span>100% private, no data sent anywhere</span>
+      </div>
+      <div class="trust-item" role="listitem">
+        <span class="trust-icon" aria-hidden="true">⚡</span>
+        <span>Works offline once loaded</span>
+      </div>
+      <div class="trust-item" role="listitem">
+        <span class="trust-icon" aria-hidden="true">♿</span>
+        <span>Fully keyboard accessible</span>
+      </div>
+      <div class="trust-item" role="listitem">
+        <span class="trust-icon" aria-hidden="true">📱</span>
+        <span>Works on phone, tablet and laptop</span>
+      </div>
+    </div>
+
+    <!-- how it works -->
+    <section class="how-it-works" aria-labelledby="how-heading">
+      <div class="section-inner">
+        <div class="section-label">How it works</div>
+        <h2 id="how-heading">Up in under a minute</h2>
+        <p class="how-sub">No setup, just open and go.</p>
+        <div class="steps">
+          <div class="step-card">
+            <div class="step-card-num" aria-hidden="true">01</div>
+            <div class="step-card-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3>Create your account</h3>
+            <p>Sign up with your name, email and a password. Nothing goes to a server.</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-card-num" aria-hidden="true">02</div>
+            <div class="step-card-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3>Log your transactions</h3>
+            <p>Add expenses with a description, amount, category and date. Saves instantly.</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-card-num" aria-hidden="true">03</div>
+            <div class="step-card-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M3 20h18M8 20V10m4 10V4m4 16v-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3>Track and adjust</h3>
+            <p>Your dashboard updates live. Set a cap and get alerted when you go over.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- features -->
+    <section class="features" aria-labelledby="features-heading">
+      <div class="features-inner">
+        <div class="section-label">Features</div>
+        <h2 id="features-heading">What it does</h2>
+
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3>Transactions</h3>
+            <p>Add, edit and remove transactions. Sort by date, amount or description. Filter by category.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2v20M17 7H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3>Budget cap</h3>
+            <p>Set a spending limit. Green when under, red when over.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M16.5 16.5L21 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3>Search</h3>
+            <p>Search by plain text or regex. Matches highlight as you type.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- privacy callout -->
+    <section class="privacy-section" aria-labelledby="privacy-heading">
+      <div class="section-inner">
+        <div class="privacy-grid">
+          <div class="privacy-lead">
+            <div class="section-label">Privacy</div>
+            <h2 id="privacy-heading">Your data stays on your device</h2>
+            <p>Your account, transactions and settings live in your browser. No server, no database, no analytics.</p>
+            <a href="register.html" class="btn btn--primary btn--lg privacy-cta">Get started free</a>
+          </div>
+          <div class="privacy-facts" aria-label="Privacy facts">
+            <div class="privacy-fact">
+              <div class="privacy-fact-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div>
+                <strong>Zero network requests</strong>
+                <p>After the page loads, no data is sent anywhere.</p>
+              </div>
+            </div>
+            <div class="privacy-fact">
+              <div class="privacy-fact-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M7 11V7a5 5 0 0110 0v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div>
+                <strong>Passwords are hashed</strong>
+                <p>SHA-256 with a random salt. Not stored in plain text.</p>
+              </div>
+            </div>
+            <div class="privacy-fact">
+              <div class="privacy-fact-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div>
+                <strong>Export any time</strong>
+                <p>Download your data as JSON and take it anywhere.</p>
+              </div>
+            </div>
+            <div class="privacy-fact">
+              <div class="privacy-fact-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div>
+                <strong>No ads. No tracking.</strong>
+                <p>No third-party scripts. No cookies. No analytics.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- final cta -->
+    <section class="cta-strip" aria-labelledby="cta-heading">
+      <div class="cta-inner">
+        <div class="cta-badge" aria-hidden="true">Free forever</div>
+        <h2 id="cta-heading">Stop guessing, start knowing.</h2>
+        <p class="cta-sub">30 seconds to set up. No card, no fees, no ads.</p>
+        <div class="cta-actions">
+          <a href="register.html" class="btn btn--cta-white btn--xl">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 2v20M2 12h20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Create free account
+          </a>
+          <a href="login.html" class="btn btn--cta-ghost btn--xl">Sign in</a>
+        </div>
+        <p class="cta-note">Your data is stored in your browser. We never see it.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="app-footer home-footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        
+        <span class="footer-brand-name">Student Finance Tracker</span>
+      </div>
+      <nav aria-label="Footer navigation">
+        <ul class="footer-links" role="list">
+          <li><a href="index.html" class="footer-link">Home</a></li>
+          <li><a href="login.html" class="footer-link">Login</a></li>
+          <li><a href="register.html" class="footer-link">Register</a></li>
+          <li><a href="app.html" class="footer-link">App</a></li>
+          <li><a href="tests.html" class="footer-link">Tests</a></li>
+        </ul>
+      </nav>
+      <p class="footer-copy">&copy; 2025 Student Finance Tracker</p>
+    </div>
+  </footer>
+
+</body>
+</html>

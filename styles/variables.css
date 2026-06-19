@@ -1,0 +1,184 @@
+
+
+:root {
+  /* color palette */
+
+  /* Neutrals */
+  --color-bg:            #f4f4f4;
+  --color-surface:       #ffffff;
+  --color-surface-02:    #f4f4f4;
+  --color-surface-03:    #e8e8e8;
+
+  --color-border:        #e0e0e0;
+  --color-border-strong: #8d8d8d;
+  --color-border-input:  #8d8d8d;
+
+  --color-text-primary:   #161616;
+  --color-text-secondary: #525252;
+  --color-text-disabled:  #a8a8a8;
+  --color-text-inverse:   #ffffff;
+  --color-text-on-color:  #ffffff;
+
+  /* Interactive — Blue 60 */
+  --color-interactive:       #0f62fe;
+  --color-interactive-hover: #0353e9;
+  --color-interactive-active:#002d9c;
+  --color-link:              #0f62fe;
+  --color-link-hover:        #0043ce;
+
+  /* Focus */
+  --color-focus:   #0f62fe;
+  --color-focus-inset: #ffffff;
+
+  /* Semantic */
+  --color-success:         #198038;
+  --color-success-bg:      #defbe6;
+  --color-success-text:    #0e6027;
+  --color-warning:         #f1c21b;
+  --color-warning-bg:      #fdf6dd;
+  --color-warning-text:    #8e6a00;
+  --color-error:           #da1e28;
+  --color-error-bg:        #fff1f1;
+  --color-error-text:      #a2191f;
+  --color-info:            #0043ce;
+  --color-info-bg:         #edf5ff;
+
+  /* Category Colors — subtle tints */
+  --color-cat-food:           #d4e6ff;
+  --color-cat-food-text:      #003a6d;
+  --color-cat-books:          #defbe6;
+  --color-cat-books-text:     #0e6027;
+  --color-cat-transport:      #fdf6dd;
+  --color-cat-transport-text: #8e6a00;
+  --color-cat-entertainment:  #f6f2ff;
+  --color-cat-entertainment-text: #491d8b;
+  --color-cat-fees:           #fff1f1;
+  --color-cat-fees-text:      #a2191f;
+  --color-cat-other:          #f4f4f4;
+  --color-cat-other-text:     #525252;
+
+  /* Surfaces for interactive states */
+  --color-hover-ui:     rgba(141, 141, 141, 0.12);
+  --color-selected-ui:  rgba(15, 98, 254, 0.08);
+
+  /* typography */
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+               "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Code", "Fira Code", "Courier New", monospace;
+
+  --text-xs:   0.75rem;    /* 12px */
+  --text-sm:   0.875rem;   /* 14px */
+  --text-base: 1rem;       /* 16px */
+  --text-lg:   1.125rem;   /* 18px */
+  --text-xl:   1.25rem;    /* 20px */
+  --text-2xl:  1.5rem;     /* 24px */
+  --text-3xl:  1.875rem;   /* 30px */
+  --text-4xl:  2.25rem;    /* 36px */
+
+  --leading-tight:   1.25;
+  --leading-snug:    1.375;
+  --leading-normal:  1.5;
+  --leading-relaxed: 1.625;
+
+  --font-weight-normal:   400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+
+  /* spacing — 4px base unit */
+
+  --space-px:  1px;
+  --space-0:   0;
+  --space-1:   0.25rem;  /* 4px */
+  --space-2:   0.5rem;   /* 8px */
+  --space-3:   0.75rem;  /* 12px */
+  --space-4:   1rem;     /* 16px */
+  --space-5:   1.25rem;  /* 20px */
+  --space-6:   1.5rem;   /* 24px */
+  --space-7:   1.75rem;  /* 28px */
+  --space-8:   2rem;     /* 32px */
+  --space-10:  2.5rem;   /* 40px */
+  --space-12:  3rem;     /* 48px */
+  --space-16:  4rem;     /* 64px */
+  --space-20:  5rem;     /* 80px */
+  --space-24:  6rem;     /* 96px */
+
+  /* border radius */
+
+  --radius-none: 0;
+  --radius-sm:   0.125rem;  /* 2px  — tags, chips */
+  --radius-md:   0.25rem;   /* 4px  — inputs, buttons */
+  --radius-lg:   0.5rem;    /* 8px  — cards, modals */
+  --radius-xl:   0.75rem;   /* 12px */
+  --radius-full: 9999px;    /* pills */
+
+  /* shadows — minimal and purposeful */
+
+  --shadow-sm:  0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md:  0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-lg:  0 8px 24px rgba(0, 0, 0, 0.10);
+  --shadow-xl:  0 16px 48px rgba(0, 0, 0, 0.14);
+  --shadow-focus: 0 0 0 3px var(--color-focus);
+
+  /* borders */
+
+  --border-width: 1px;
+  --border:       1px solid var(--color-border);
+  --border-strong: 1px solid var(--color-border-strong);
+
+  /* transitions */
+
+  --transition-fast:   100ms ease;
+  --transition-base:   150ms ease;
+  --transition-slow:   250ms ease;
+  --transition-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --transition-enter:  cubic-bezier(0.0, 0.0, 0.2, 1);
+  --transition-exit:   cubic-bezier(0.4, 0.0, 1, 1);
+
+  /* z-index scale */
+
+  --z-below:    -1;
+  --z-base:      0;
+  --z-raised:    10;
+  --z-dropdown:  100;
+  --z-sticky:    200;
+  --z-overlay:   300;
+  --z-modal:     400;
+  --z-toast:     500;
+
+  /* layout */
+
+  --header-height:    3.5rem;   /* 56px */
+  --max-width:        72rem;    /* 1152px */
+  --content-width:    64rem;    /* 1024px */
+  --sidebar-width:    14rem;    /* 224px */
+  --table-min-width:  40rem;    /* 640px */
+
+  /* component-specific */
+
+  --input-height:     2.5rem;   /* 40px */
+  --input-height-sm:  2rem;     /* 32px */
+  --btn-height:       2.5rem;   /* 40px */
+  --btn-height-sm:    2rem;     /* 32px */
+  --nav-height:       var(--header-height);
+  --chart-height:     10rem;    /* 160px */
+  --toast-width:      20rem;    /* 320px */
+}
+
+/* Dark mode support — minimal, accessibility-focused */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg:             #161616;
+    --color-surface:        #262626;
+    --color-surface-02:     #393939;
+    --color-surface-03:     #525252;
+    --color-border:         #393939;
+    --color-border-strong:  #6f6f6f;
+    --color-text-primary:   #f4f4f4;
+    --color-text-secondary: #c6c6c6;
+    --color-text-disabled:  #6f6f6f;
+    --color-hover-ui:       rgba(141, 141, 141, 0.16);
+    --color-selected-ui:    rgba(15, 98, 254, 0.16);
+  }
+}

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In · Student Finance Tracker</title>
+  <link rel="stylesheet" href="styles/variables.css">
+  <link rel="stylesheet" href="styles/reset.css">
+  <link rel="stylesheet" href="styles/layout.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/responsive.css">
+  <link rel="stylesheet" href="styles/home.css">
+</head>
+<body class="auth-page">
+
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="app-header" role="banner">
+    <div class="header-inner">
+      <a class="header-brand" href="index.html" aria-label="Student Finance Tracker home">
+        
+        <span class="brand-name">Student Finance Tracker</span>
+      </a>
+      <nav class="app-nav" aria-label="Main navigation">
+        <ul class="nav-list" role="list">
+          <li><a class="nav-link" href="index.html">Home</a></li>
+          <li><a class="nav-link active" href="login.html" aria-current="page">Login</a></li>
+          <li><a class="nav-link nav-link--cta" href="register.html">Get Started</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content" class="auth-main" role="main">
+    <div class="auth-card">
+
+      <div class="auth-header">
+        <h1>Sign in</h1>
+        <p>Welcome back. Enter your details to continue.</p>
+      </div>
+
+      <div id="login-error" class="auth-error" role="alert" aria-live="assertive" hidden></div>
+
+      <form id="login-form" class="auth-form" novalidate>
+
+        <div class="form-field">
+          <label for="login-email" class="form-label form-label--required">Email address</label>
+          <input
+            type="email"
+            id="login-email"
+            class="input"
+            required
+            autocomplete="email"
+            aria-required="true"
+            aria-describedby="login-email-error"
+            placeholder="you@example.com"
+          >
+          <span id="login-email-error" class="field-error" role="alert" aria-live="assertive"></span>
+        </div>
+
+        <div class="form-field">
+          <label for="login-password" class="form-label form-label--required">Password</label>
+          <div class="input-with-reveal">
+            <input
+              type="password"
+              id="login-password"
+              class="input"
+              required
+              autocomplete="current-password"
+              aria-required="true"
+              aria-describedby="login-password-error"
+            >
+            <button
+              type="button"
+              class="reveal-btn"
+              id="toggle-login-password"
+              aria-label="Show password"
+              aria-pressed="false"
+            >
+              <svg class="eye-open" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z" stroke="currentColor" stroke-width="1.5"/>
+                <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+              <svg class="eye-closed" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" hidden>
+                <path d="M1 1l14 14M6.5 6.6A2 2 0 0010 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M3.5 3.7C2.1 4.8 1 6.5 1 8s2.5 5 7 5a8.2 8.2 0 003.5-.8M6 2.3A7.3 7.3 0 0115 8c-.3.8-.8 1.7-1.5 2.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+          <span id="login-password-error" class="field-error" role="alert" aria-live="assertive"></span>
+        </div>
+
+        <button type="submit" class="btn btn--primary btn--full" id="login-submit">
+          Sign in
+        </button>
+
+      </form>
+
+      <p class="auth-switch">
+        Don't have an account? <a href="register.html" class="link">Create one</a>
+      </p>
+
+    </div>
+  </main>
+
+  <script type="module">
+    import { login, isLoggedIn } from './scripts/auth.js';
+
+    if (isLoggedIn()) window.location.replace('app.html');
+
+    if (!window.crypto?.subtle) {
+      document.getElementById('login-error').textContent =
+        'This app must be opened from a web server, not a file. Run: npx serve . — then open http://localhost:3000';
+      document.getElementById('login-error').hidden = false;
+      document.getElementById('login-submit').disabled = true;
+    }
+
+    const form          = document.getElementById('login-form');
+    const errorBanner   = document.getElementById('login-error');
+    const submitBtn     = document.getElementById('login-submit');
+    const passwordInput = document.getElementById('login-password');
+    const toggleBtn     = document.getElementById('toggle-login-password');
+
+    // Password reveal toggle
+    toggleBtn.addEventListener('click', () => {
+      const isHidden = passwordInput.type === 'password';
+      passwordInput.type = isHidden ? 'text' : 'password';
+      toggleBtn.setAttribute('aria-pressed', isHidden ? 'true' : 'false');
+      toggleBtn.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
+      toggleBtn.querySelector('.eye-open').hidden  =  isHidden;
+      toggleBtn.querySelector('.eye-closed').hidden = !isHidden;
+    });
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      errorBanner.hidden = true;
+
+      const email    = document.getElementById('login-email').value.trim();
+      const password = passwordInput.value;
+
+      let hasErrors = false;
+
+      if (!email) {
+        document.getElementById('login-email-error').textContent = 'Email is required.';
+        hasErrors = true;
+      } else {
+        document.getElementById('login-email-error').textContent = '';
+      }
+
+      if (!password) {
+        document.getElementById('login-password-error').textContent = 'Password is required.';
+        hasErrors = true;
+      } else {
+        document.getElementById('login-password-error').textContent = '';
+      }
+
+      if (hasErrors) return;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Signing in…';
+
+      let result;
+      try {
+        result = await login({ email, password });
+      } catch (err) {
+        errorBanner.textContent = 'Something went wrong. Make sure you are opening this app from a web server (npx serve .), not directly from a file.';
+        errorBanner.hidden    = false;
+        submitBtn.disabled    = false;
+        submitBtn.textContent = 'Sign in';
+        return;
+      }
+
+      if (result.success) {
+        window.location.replace('app.html');
+      } else {
+        errorBanner.textContent = result.message;
+        errorBanner.hidden = false;
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Sign in';
+      }
+    });
+  </script>
+
+</body>
+</html>

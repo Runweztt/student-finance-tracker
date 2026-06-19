@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Validation Tests  Student Finance Tracker</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      background: #f4f4f4;
+      color: #161616;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .subtitle {
+      color: #525252;
+      font-size: 0.875rem;
+      margin-bottom: 2rem;
+    }
+
+    .suite {
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+
+    .suite-header {
+      padding: 0.75rem 1rem;
+      background: #f4f4f4;
+      border-bottom: 1px solid #e0e0e0;
+      font-weight: 600;
+      font-size: 0.8125rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #525252;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .suite-count {
+      font-weight: 700;
+      font-size: 0.75rem;
+    }
+
+    .test-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.625rem 1rem;
+      border-bottom: 1px solid #f4f4f4;
+    }
+
+    .test-row:last-child { border-bottom: none; }
+
+    .badge {
+      display: inline-block;
+      min-width: 3rem;
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-align: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+      letter-spacing: 0.04em;
+    }
+
+    .pass { background: #defbe6; color: #0e6027; }
+    .fail { background: #fff1f1; color: #a2191f; }
+
+    .test-name {
+      flex: 1;
+      font-size: 0.8125rem;
+      color: #161616;
+    }
+
+    .test-detail {
+      font-size: 0.75rem;
+      color: #6f6f6f;
+      font-family: ui-monospace, monospace;
+    }
+
+    .summary {
+      display: flex;
+      gap: 1.5rem;
+      padding: 1rem;
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      margin-bottom: 1.5rem;
+    }
+
+    .summary-stat { }
+    .summary-num { font-size: 1.5rem; font-weight: 700; }
+    .summary-label { font-size: 0.75rem; color: #525252; }
+    .summary-pass .summary-num { color: #198038; }
+    .summary-fail .summary-num { color: #da1e28; }
+
+    code {
+      font-family: ui-monospace, monospace;
+      font-size: 0.8125rem;
+      background: #f4f4f4;
+      padding: 1px 4px;
+      border-radius: 2px;
+    }
+
+    a {
+      color: #0f62fe;
+      text-decoration: none;
+    }
+
+    a:hover { text-decoration: underline; }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      color: #525252;
+    }
+  </style>
+</head>
+<body>
+  <a href="index.html" class="back-link">← Back to app</a>
+  <h1>Validation Tests</h1>
+  <p class="subtitle">Unit tests for all regex validators in <code>scripts/validators.js</code></p>
+
+  <div id="summary" class="summary"></div>
+  <div id="results"></div>
+
+  <script type="module">
+    import {
+      descRe,
+      amountRe,
+      dateRe,
+      categoryRe,
+      dupWordRe,
+      centsRe,
+      validateDescription,
+      validateAmount,
+      validateDate,
+      validateCategory,
+      checkDuplicateWords,
+      validateImportedRecord,
+      validateCategoryName,
+    } from './scripts/validators.js';
+
+    const suites = [
+      {
+        name: 'Description — /^\\S(?:.*\\S)?$|^\\S$/',
+        tests: [
+          { name: 'valid single word',                  fn: () => validateDescription('Lunch').valid },
+          { name: 'valid multi-word',                   fn: () => validateDescription('Lunch at cafeteria').valid },
+          { name: 'leading space fails',                fn: () => !validateDescription(' lunch').valid },
+          { name: 'trailing space fails',               fn: () => !validateDescription('lunch ').valid },
+          { name: 'both sides fail',                    fn: () => !validateDescription(' lunch ').valid },
+          { name: 'empty string fails',                 fn: () => !validateDescription('').valid },
+          { name: 'whitespace-only fails',              fn: () => !validateDescription('   ').valid },
+          { name: 'null fails',                         fn: () => !validateDescription(null).valid },
+          { name: 'single character passes',            fn: () => validateDescription('A').valid },
+          { name: 'internal spaces fine',               fn: () => validateDescription('a b c').valid },
+          { name: 'numbers in description fine',        fn: () => validateDescription('Test 123 value').valid },
+          { name: 'special chars fine mid-string',      fn: () => validateDescription('Bus pass — weekly').valid },
+          { name: 'returns message on failure',         fn: () => !validateDescription(' bad').valid && validateDescription(' bad').message.length > 0 },
+        ],
+      },
+      {
+        name: 'Amount — /^(0|[1-9]\\d*)(\\.\\d{1,2})?$/',
+        tests: [
+          { name: '"12" passes',                        fn: () => validateAmount('12').valid },
+          { name: '"12.50" passes',                     fn: () => validateAmount('12.50').valid },
+          { name: '"12.5" passes',                      fn: () => validateAmount('12.5').valid },
+          { name: '"0" passes',                         fn: () => validateAmount('0').valid },
+          { name: '"0.99" passes',                      fn: () => validateAmount('0.99').valid },
+          { name: '"1234567" passes',                   fn: () => validateAmount('1234567').valid },
+          { name: '"01" fails (leading zero)',           fn: () => !validateAmount('01').valid },
+          { name: '"12.500" fails (3 decimals)',         fn: () => !validateAmount('12.500').valid },
+          { name: '"-5" fails (negative)',              fn: () => !validateAmount('-5').valid },
+          { name: '"abc" fails',                        fn: () => !validateAmount('abc').valid },
+          { name: '".50" fails (no integer part)',      fn: () => !validateAmount('.50').valid },
+          { name: '"" fails (empty)',                   fn: () => !validateAmount('').valid },
+          { name: 'number type also valid',             fn: () => validateAmount(12.5).valid },
+          { name: '"1,000" fails (comma)',              fn: () => !validateAmount('1,000').valid },
+        ],
+      },
+      {
+        name: 'Date — /^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$/',
+        tests: [
+          { name: '"2025-09-25" passes',               fn: () => validateDate('2025-09-25').valid },
+          { name: '"2025-01-01" passes',               fn: () => validateDate('2025-01-01').valid },
+          { name: '"2025-12-31" passes',               fn: () => validateDate('2025-12-31').valid },
+          { name: '"2024-02-29" passes (structurally)', fn: () => validateDate('2024-02-29').valid },
+          { name: '"2025-13-01" fails (bad month)',     fn: () => !validateDate('2025-13-01').valid },
+          { name: '"2025-00-01" fails (month 0)',       fn: () => !validateDate('2025-00-01').valid },
+          { name: '"2025-01-32" fails (bad day)',       fn: () => !validateDate('2025-01-32').valid },
+          { name: '"2025-01-00" fails (day 0)',         fn: () => !validateDate('2025-01-00').valid },
+          { name: '"25/09/2025" fails (wrong format)',  fn: () => !validateDate('25/09/2025').valid },
+          { name: '"2025-9-5" fails (no padding)',      fn: () => !validateDate('2025-9-5').valid },
+          { name: '"" fails (empty)',                   fn: () => !validateDate('').valid },
+          { name: '"not-a-date" fails',                 fn: () => !validateDate('not-a-date').valid },
+        ],
+      },
+      {
+        name: 'Category — /^[A-Za-z]+(?:[ -][A-Za-z]+)*$/',
+        tests: [
+          { name: '"Food" passes',                     fn: () => validateCategory('Food').valid },
+          { name: '"Non-Food" passes (hyphen)',         fn: () => validateCategory('Non-Food').valid },
+          { name: '"Personal Care" passes (space)',     fn: () => validateCategory('Personal Care').valid },
+          { name: '"Category1" fails (digit)',          fn: () => !validateCategory('Category1').valid },
+          { name: '"food!" fails (punctuation)',        fn: () => !validateCategory('food!').valid },
+          { name: '"a  b" fails (double space)',        fn: () => !validateCategory('a  b').valid },
+          { name: '"--" fails (no letters)',            fn: () => !validateCategory('--').valid },
+          { name: '"" fails (empty)',                   fn: () => !validateCategory('').valid },
+          { name: '"A" passes (single char)',           fn: () => validateCategory('A').valid },
+          { name: '"Mixed-Case Word" passes',           fn: () => validateCategory('Mixed-Case Word').valid },
+        ],
+      },
+      {
+        name: 'Advanced — Duplicate word back-reference /\\b(\\w+)\\s+\\1\\b/i',
+        tests: [
+          { name: '"the the" detected',                fn: () => checkDuplicateWords('the the lunch') },
+          { name: '"Lunch Lunch" detected (caps)',      fn: () => checkDuplicateWords('Lunch Lunch') },
+          { name: '"at at" mid-string detected',        fn: () => checkDuplicateWords('coffee at at cafeteria') },
+          { name: 'case-insensitive: "The the"',        fn: () => checkDuplicateWords('The the morning') },
+          { name: '"lunch at cafeteria" — no match',    fn: () => !checkDuplicateWords('lunch at cafeteria') },
+          { name: 'similar but different words fine',   fn: () => !checkDuplicateWords('thing things') },
+          { name: 'empty string — no match',            fn: () => !checkDuplicateWords('') },
+          { name: 'dupWordRe is exported as a RegExp',  fn: () => dupWordRe instanceof RegExp },
+        ],
+      },
+      {
+        name: 'Advanced — Cents /\\b\\d+\\.\\d{2}\\b/',
+        tests: [
+          { name: '"12.50" matches',                   fn: () => centsRe.test('12.50') },
+          { name: '"89.99" matches',                   fn: () => centsRe.test('89.99') },
+          { name: '"12" no match',                     fn: () => !centsRe.test('12') },
+          { name: '"12.5" no match (1 decimal)',        fn: () => !centsRe.test('12.5') },
+          { name: '"12.500" no match (3 decimals)',     fn: () => !centsRe.test('12.500') },
+        ],
+      },
+      {
+        name: 'Import Schema Validation',
+        tests: [
+          {
+            name: 'valid record passes',
+            fn: () => validateImportedRecord({
+              id: 'txn_1', description: 'Test', amount: 10.0,
+              category: 'Food', date: '2025-01-01'
+            }).length === 0,
+          },
+          {
+            name: 'missing id fails',
+            fn: () => validateImportedRecord({
+              description: 'Test', amount: 10, category: 'Food', date: '2025-01-01'
+            }).length > 0,
+          },
+          {
+            name: 'string amount fails',
+            fn: () => validateImportedRecord({
+              id: 'x', description: 'Test', amount: '10',
+              category: 'Food', date: '2025-01-01'
+            }).length > 0,
+          },
+          {
+            name: 'negative amount fails',
+            fn: () => validateImportedRecord({
+              id: 'x', description: 'Test', amount: -5,
+              category: 'Food', date: '2025-01-01'
+            }).length > 0,
+          },
+          {
+            name: 'bad date format fails',
+            fn: () => validateImportedRecord({
+              id: 'x', description: 'Test', amount: 5,
+              category: 'Food', date: '01-01-2025'
+            }).length > 0,
+          },
+          {
+            name: 'null record fails',
+            fn: () => validateImportedRecord(null).length > 0,
+          },
+        ],
+      },
+      {
+        name: 'Category Name Validation',
+        tests: [
+          { name: '"Housing" valid',                    fn: () => validateCategoryName('Housing', []).valid },
+          { name: 'duplicate fails',                    fn: () => !validateCategoryName('Food', ['Food', 'Books']).valid },
+          { name: 'case-insensitive duplicate fails',   fn: () => !validateCategoryName('food', ['Food']).valid },
+          { name: 'empty fails',                        fn: () => !validateCategoryName('', []).valid },
+          { name: '"123" fails (digits)',               fn: () => !validateCategoryName('123', []).valid },
+        ],
+      },
+    ];
+
+    let totalPass = 0;
+    let totalFail = 0;
+    const container = document.getElementById('results');
+
+    suites.forEach(suite => {
+      const results = suite.tests.map(t => {
+        let passed = false;
+        let error = null;
+        try {
+          passed = t.fn();
+        } catch (e) {
+          error = e.message;
+        }
+        if (passed) totalPass++; else totalFail++;
+        return { name: t.name, passed, error };
+      });
+
+      const suitePass = results.filter(r => r.passed).length;
+      const suiteFail = results.length - suitePass;
+
+      const suiteEl = document.createElement('div');
+      suiteEl.className = 'suite';
+
+      const headerEl = document.createElement('div');
+      headerEl.className = 'suite-header';
+      headerEl.innerHTML = `
+        <span>${suite.name}</span>
+        <span class="suite-count" style="color: ${suiteFail > 0 ? '#da1e28' : '#198038'}">
+          ${suitePass}/${results.length}
+        </span>
+      `;
+
+      suiteEl.appendChild(headerEl);
+
+      results.forEach(r => {
+        const row = document.createElement('div');
+        row.className = 'test-row';
+        row.innerHTML = `
+          <span class="badge ${r.passed ? 'pass' : 'fail'}">${r.passed ? 'PASS' : 'FAIL'}</span>
+          <span class="test-name">
+            ${r.name}
+            ${r.error ? `<span class="test-detail"> — ${r.error}</span>` : ''}
+          </span>
+        `;
+        suiteEl.appendChild(row);
+      });
+
+      container.appendChild(suiteEl);
+    });
+
+    const total = totalPass + totalFail;
+    const summaryEl = document.getElementById('summary');
+    summaryEl.innerHTML = `
+      <div class="summary-stat summary-pass">
+        <div class="summary-num">${totalPass}</div>
+        <div class="summary-label">Passed</div>
+      </div>
+      <div class="summary-stat summary-fail">
+        <div class="summary-num">${totalFail}</div>
+        <div class="summary-label">Failed</div>
+      </div>
+      <div class="summary-stat">
+        <div class="summary-num">${total}</div>
+        <div class="summary-label">Total</div>
+      </div>
+      <div class="summary-stat">
+        <div class="summary-num" style="color: ${totalFail === 0 ? '#198038' : '#da1e28'}">
+          ${Math.round((totalPass / total) * 100)}%
+        </div>
+        <div class="summary-label">Pass rate</div>
+      </div>
+    `;
+
+    document.title = `Tests (${totalPass}/${total} passing) Student Finance Tracker`;
+  </script>
+</body>
+</html>
