@@ -66,7 +66,7 @@ With the server running open `http://localhost:3000/tests.html`. The page runs a
 │
 └── docs/
     ├── wireframes.md
-    └── accessibility-audit.md
+    
 ```
 
 ## Regex patterns
